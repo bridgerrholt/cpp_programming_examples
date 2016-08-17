@@ -1,0 +1,4 @@
+g++ -std=c++11 %example_file% -o %example_name%
+
+For example:
+g++ -std=c++11 example_01.cpp -o example_01
