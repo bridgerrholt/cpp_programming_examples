@@ -7,11 +7,6 @@
 // Makes you not have to type "std::" before every standard name.
 using namespace std;
 
-// Functions in C++ typically have 4 parts,
-// we'll disect the function definition `int main() { }`.
-// First is the return value, `int` (which means integer).
-// Second is the function name, "main".
-// Third is the parameter list
 // Every C++ program must have the function "main" and it must return "int".
 int main()
 {
