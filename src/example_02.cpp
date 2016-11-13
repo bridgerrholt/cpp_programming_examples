@@ -6,24 +6,24 @@
 
 using namespace std;
 
-// Keyword `typedef` creates a type alias, letting you to use better names for complicated types.
-// In this declaration, we declare our type "NumberType" to be an `unsigned long long`.
+// The keyword `using` creates an alias, letting you to use better names for complicated types.
+// In this declaration we declare our type, `NumberType`, to be a `long long int`.
 //
-// In C++, there are multiple integer types, each without a hard-set size. A reason for this is
-// so that programs can compile well for different architectures (for example, using 32-bit
-// integers is ideal for a 32-bit OS, while 64-bit integers are ideal for a 64-bit OS).
-// The primary integer type you should use for most things is `int`, and use `unsigned` if that
-// integer should always be positive.
+// In C++ there are multiple integer types, each described by a minimum number of bits.
+// The primary integer type you should use for most things is `int` (which has at least 16 bits,
+// but for every platform you build for it probably has at least 32).
 //
-// We use `unsigned` for our prime number function because
-// negative numbers cannot be prime and not having a sign means we can have numbers twice as large.
-// Speaking of number size, we use `long long` to declare our type as the largest integer possible.
+// We use the `long long` modifier to declare our type as the largest integer available, it is
+// guaranteed to have at least 64 bits. If we were to use the `long` modifier, it would be
+// guaranteed to have 32 bits.
 //
-// It should be noted that the C++ standard already declares a large unsigned type, `std::size_t`,
-// but it is important to know about `typedef` because it is used a lot in C++.
-typedef unsigned long long NumberType;
+// It should be noted that in the C++ standard header `<cstdint>`, the type `intmax_t` is defined
+// as the largest integer available, so we are reinventing the wheel here.
+// However, using this alias makes it much easier in the future to change the type we're working
+// with if we ever had to.
+using NumberType = long long int;
 
-// Functions in C++ typically have 4 parts, we'll disect the function "isPrime".
+// Plain functions in C++ typically have 4 parts, we'll disect the function `isPrime`.
 //
 // First is the return value, `bool` (which means boolean);
 // we're using a `bool` because a given number can be either prime or not.
@@ -32,21 +32,19 @@ typedef unsigned long long NumberType;
 //
 // Third is the parameter list (which is always between parenthesis);
 // every variable in the list must have a declared type (our prime function only checks one value,
-// which must be a "NumberType" object (which, remember, really means `unsigned long long`)).
+// which must be a `NumberType` object (which, remember, really means `long long int`)).
 //
 // The final part is the body, which must be between curly braces ("{" and "}").
 bool isPrime(NumberType n)
 {
-  if (n <= 1)
-    return false;
+  // Prime numbers must be greater than 1.
+  if (n > 1) { // Curly braces must be used if there are multiple statements.
 
-  // Curly braces must be used if there are multiple statements.
-  else {
     for (NumberType i { 2 }; // Once again using curly braces to initialize a variable.
          i < n / 2;          // Integer division causes automatic rounding down.
          ++i) {              // The pre-increment operator simply adds 1 to the variable.
 
-      // If "n" is divisible by "i", then "n" is not prime.
+      // If `n` is divisible by `i`, then `n` is not prime.
       if (n % i == 0)
         return false;
     }
@@ -54,6 +52,10 @@ bool isPrime(NumberType n)
     // If no number was a factor, it must be prime.
     return true;
   }
+
+  // It was not greater than 1.
+  else
+    return false;
 }
 
 
@@ -83,18 +85,21 @@ int main()
       try {
         // `std::boolalpha` tells the stream to output `bool` values as "true" or "false" instead
         // of "1" or "0", respectively.
-        // `std::stoll` converts a `std::string` to an `unsigned long long`
-        // ("s" means "string", "to", "ull" means "unsigned long long").
-        cout << boolalpha << isPrime(stoull(input)) << endl;
+        // `std::stoll` converts a `std::string` to a `long long int`
+        // ("s" means "string", "to", "ll" means "long long").
+        cout << boolalpha << isPrime(stoll(input)) << endl;
       }
 
       // If an exception is thrown within the `try` block, the `catch` block will recieve the
       // transmitted data, which usually contains an error message.
       // You can have multiple catch blocks but for standard functions all we need is
-      // `std::exception`. The ampersand ("&") indicates that our variable "e" will be a reference
-      // to an std::exception. You always want to reference exceptions because it allows many
-      // kinds to be caught under one name.
-      catch (std::exception & e) {
+      // `std::exception`.
+      // The ampersand ("&") indicates that our variable `e` will be a reference
+      // to an `std::exception`. The `const` keyword means we are referencing a "constant" object,
+      // meaning we cannot modify it. You always want to catch exceptions by reference because it
+      // allows many kinds to be caught under one name, and you almost always want to catch them
+      // as a constant.
+      catch (std::exception const & e) {
         // The `std::exception` class has a function `what` that returns the error message.
         cout << e.what() << endl;
       }
