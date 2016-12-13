@@ -87,7 +87,7 @@ int main()
         // of "1" or "0", respectively.
         // `std::stoll` converts a `std::string` to a `long long int`
         // ("s" means "string", "to", "ll" means "long long").
-        cout << boolalpha << isPrime(stoll(input)) << endl;
+        cout << "Is prime? " << boolalpha << isPrime(stoll(input)) << endl;
       }
 
       // If an exception is thrown within the `try` block, the `catch` block will recieve the
@@ -101,7 +101,7 @@ int main()
       // as a constant.
       catch (std::exception const & e) {
         // The `std::exception` class has a function `what` that returns the error message.
-        cout << e.what() << endl;
+        cout << "Error: " << e.what() << endl;
       }
     }
   }
